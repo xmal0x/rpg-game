@@ -5,7 +5,7 @@
   "scripts": {
     "build:dev": "env NODE_ENV=development npx webpack",
     "build": "env NODE_ENV=production npx webpack",
-    "start": "webpack server",
+    "start": "node scripts/start.js",
     "lint": "npx eslint src/**/*.js",
     "prettier": "npx prettier --write .",
     "dev": "npx webpack server",
@@ -38,5 +38,9 @@
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2",
     "husky": "^6.0.0"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^20.1.5",
+    "@hapi/inert": "^6.0.3"
   }
 }
