@@ -21,6 +21,7 @@ class ClientGame {
   initEngine() {
     this.engine.loadSprites(sprites).then(() => {
       this.engine.on('render', () => {
+        //  this.engine.on('render', (_, time) => {
         // console.log(_ + time);
         this.map.init();
       });
