@@ -1,11 +1,37 @@
 import './index.scss';
+import ClientGame from './client/clientGame';
+
+window.addEventListener('load', () => {
+  ClientGame.init({ tagId: 'game' });
+});
+
+/*
 import MaleWalk from './assets/Male-3-Walk.png';
+import terrainAtlas from './assets/terrain.png';
+import worldCfg from './configs/world.json';
+import sprites from './configs/sprites.js';
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
 const spriteW = 48;
 const spriteH = 48;
+
+const terrain = document.createElement('img');
+terrain.src = terrainAtlas;
+
+terrain.addEventListener('load', () => {
+	const {map} = worldCfg;
+	map.forEach((cfgRow, y) => {
+		cfgRow.forEach((cfgCell, x) => {
+			const [sX, sY, sW, sH] = sprites.terrain[cfgCell[0]].frames[0];
+			ctx.drawImage(terrain, sX, sY, sW, sH, x * spriteW, y * spriteH, spriteW, spriteH);
+		})
+	});
+})
+
+
+/*
 const shoots = 3;
 const screenWidth = 600;
 const screenHeight = 600;
@@ -72,19 +98,19 @@ function checkMovement() {
   if (bottomPressed) {
     pY += playerStep;
     updateAnimation();
-    spriteDirection = 0;
+    spriteDirection = spriteH * 0;
   } else if (upPressed) {
     pY -= playerStep;
     updateAnimation();
-    spriteDirection = 144;
+    spriteDirection = spriteH * 3;
   } else if (leftPressed) {
     pX -= playerStep;
     updateAnimation();
-    spriteDirection = 48;
+    spriteDirection = spriteH * 1;
   } else if (rightPressed) {
     pX += playerStep;
     updateAnimation();
-    spriteDirection = 96;
+    spriteDirection = spriteH * 2;
   }
 }
 
@@ -210,3 +236,4 @@ img.addEventListener('load', () => {
     draw();
   }, 120);
 });
+*/
