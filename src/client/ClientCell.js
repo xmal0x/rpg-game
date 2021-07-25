@@ -23,24 +23,45 @@ class ClientCell extends PositionedObject {
 
   initGameObjects() {
     const { cellCfg } = this;
-    this.objects = cellCfg[0].map((objCfg) => new ClientGameObject({ cell: this, objCfg }));
+    this.objects = cellCfg.map((layer, layerId) => layer.map((objCfg) => new ClientGameObject({ cell: this, objCfg, layerId })));
   }
 
-  render(time) {
+  render(time, layerId) {
     const { objects } = this;
-    objects.map((obj) => obj.render(time));
+
+    if (objects[layerId]) {
+      objects[layerId].forEach((obj) => obj.render(time));
+    }
   }
 
   addGameObject(objToAdd) {
-    this.objects.push(objToAdd);
+    const { objects } = this;
+    if (objToAdd.layerId === undefined) {
+      objToAdd.layerId = objects.length; // eslint-disable-line no-use-before-define
+    }
+
+    if (!objects[objToAdd.layerId]) {
+      objects[objToAdd.layerId] = [];
+    }
+
+    objects[objToAdd.layerId].push(objToAdd);
   }
 
   removeGameObject(objToRemove) {
-    this.objects = this.objects.filter((obj) => obj !== objToRemove);
+    const { objects } = this;
+    objects.forEach((layer, layerId) => {
+      objects[layerId] = layer.filter((obj) => obj !== objToRemove);
+    });
   }
 
   findObjectsByType(type) {
-    return this.objects.filter((obj) => obj.type === type);
+    let foundObjects = [];
+
+    this.objects.forEach((layer) => {
+      foundObjects = [...foundObjects, ...layer].filter((obj) => obj.type === type);
+    });
+
+    return foundObjects;
   }
 }
 
