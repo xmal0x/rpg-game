@@ -1,9 +1,22 @@
 import './index.scss';
 import ClientGame from './client/clientGame';
 
-window.addEventListener('load', () => {
-  ClientGame.init({ tagId: 'game' });
+const menu = document.getElementById('menu');
+const submitBtn = document.getElementById('submitBtn');
+const input = document.getElementById('name');
+const form = document.getElementById('nameForm');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  menu.parentNode.removeChild(menu);
+  ClientGame.init({ tagId: 'game', playerName: input.value });
 });
+
+
+
+// window.addEventListener('load', () => {
+//   ClientGame.init({ tagId: 'game' });
+// });
 
 /*
 import MaleWalk from './assets/Male-3-Walk.png';
