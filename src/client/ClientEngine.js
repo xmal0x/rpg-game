@@ -8,7 +8,7 @@ class ClientEngine {
     Object.assign(this, {
       canvas,
       canvases: {
-        main: canvas
+        main: canvas,
       },
       ctx: null,
       imageLoaders: [],
@@ -86,7 +86,7 @@ class ClientEngine {
   addCanvas(name, width, height) {
     let canvas = this.canvases[name];
 
-    if(!canvas) {
+    if (!canvas) {
       canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
@@ -99,7 +99,7 @@ class ClientEngine {
   switchCanvas(name) {
     const canvas = this.canvases[name];
 
-    if(canvas) {
+    if (canvas) {
       this.canvas = canvas;
       this.ctx = canvas.getContext('2d');
     }
@@ -114,7 +114,7 @@ class ClientEngine {
   renderCanvas(name, fromPos, toPos) {
     const canvas = this.canvases[name];
 
-    if(canvas) {
+    if (canvas) {
       this.ctx.drawImage(
         canvas,
         fromPos.x,
@@ -124,23 +124,24 @@ class ClientEngine {
         toPos.x,
         toPos.y,
         toPos.width,
-        toPos.height
+        toPos.height,
       );
     }
   }
 
   renderSign(opt) {
-    const options = Object.assign({
+    const options = {
       color: 'Black',
       bgColor: '#f4f4f4',
       font: '16px sans-serif',
       verticalPadding: 5,
       horizontalPadding: 3,
       textAlign: 'center',
-      textBaseline: 'center'
-    }, opt);
+      textBaseline: 'center',
+      ...opt,
+    };
 
-    const {ctx, camera} = this;
+    const { ctx, camera } = this;
 
     ctx.textBaseline = options.textBaseline;
     ctx.textAlign = options.textAlign;
@@ -148,7 +149,7 @@ class ClientEngine {
 
     const measure = ctx.measureText(options.text);
     const textHeight = measure.actualBoundingBoxAscent;
-
+    /*eslint-disable */
     const barWidth = clamp(measure.width + 2 * options.horizontalPadding, options.minWidth, options.maxWidth);
     const barHeight = textHeight + 2 * options.verticalPadding;
 
@@ -162,8 +163,7 @@ class ClientEngine {
 
     ctx.fillStyle = options.color;
     ctx.fillText(options.text, barX + barWidth / 2, barY + barHeight - options.verticalPadding, textWidth);
-
-
+    /*eslint-enable */
   }
 }
 

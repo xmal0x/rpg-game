@@ -43,7 +43,7 @@ class ClientWorld extends PositionedObject {
       }
     }
   }
-
+/*eslint-disable */
   render(time) {
     const {
       levelCfg, map, worldWidth, worldHeight,
@@ -52,22 +52,23 @@ class ClientWorld extends PositionedObject {
     for (let layerId = 0; layerId < levelCfg.layers.length; layerId += 1) {
       const layer = levelCfg.layers[layerId];
 
-      if(layer.isStatic) {
+      if (layer.isStatic) {
         this.renderStaticLayer(time, layer, layerId);
       } else {
         this.renderDynamicLayer(time, layerId, this.getRenderRange());
       }
     }
   }
+  /*eslint-enable */
 
   renderStaticLayer(time, layer, layerId) {
     const { engine } = this;
-    const {camera } = engine;
+    const { camera } = engine;
 
-    const layerName = 'static_layer_' + layerId;
+    const layerName = `static_layer_${layerId}`;
     const cameraPos = camera.worldBounds();
 
-    if(!layer.isRendered) {
+    if (!layer.isRendered) {
       engine.addCanvas(layerName, this.width, this.height);
       engine.switchCanvas(layerName);
 
@@ -78,48 +79,57 @@ class ClientWorld extends PositionedObject {
       camera.moveTo(cameraPos.x, cameraPos.y, false);
 
       engine.switchCanvas('main');
+      /*eslint-disable */
       layer.isRendered = true;
+      /*eslint-enable */
     }
 
-    engine.renderCanvas(layerName, cameraPos, {x: 0, y: 0, width: cameraPos.width, height: cameraPos.height});
+    engine.renderCanvas(layerName, cameraPos, {
+      x: 0,
+      y: 0,
+      width: cameraPos.width,
+      height: cameraPos.height,
+    });
   }
 
   renderDynamicLayer(time, layerId, rangeCells) {
-    const {map, worldWidth, worldHeight} = this;
-
-    if(!rangeCells) {
+    const { map, worldWidth, worldHeight } = this;
+/*eslint-disable */
+    if (!rangeCells) {
       rangeCells = {
         startCell: this.cellAt(0, 0),
         endCell: this.cellAt(worldWidth - 1, worldHeight - 1),
-      }
+      };
     }
+/*eslint-enable */
+    const { startCell, endCell } = rangeCells;
 
-    const {startCell, endCell} = rangeCells;
-
-    for (let row = startCell.row; row <= endCell.row; row += 1) {
-      for (let col = startCell.col; col <= endCell.col; col += 1) {
+    for (let { row } = startCell; row <= endCell.row; row += 1) {
+      for (let { col } = startCell; col <= endCell.col; col += 1) {
         map[row][col].render(time, layerId);
       }
     }
   }
 
   cellAtXY(x, y) {
-    const {width, height, cellWidth, cellHeight} = this;
-
-    return this.cellAt(
-      clamp(x, 0, width - 1) / cellWidth | 0,
-      clamp(y, 0, height - 1) / cellHeight | 0
-    )
+    const {
+      width, height, cellWidth, cellHeight,
+    } = this;
+/*eslint-disable */
+    return this.cellAt((clamp(x, 0, width - 1) / cellWidth) | 0, (clamp(y, 0, height - 1) / cellHeight) | 0);
+    /*eslint-enable */
   }
 
   getRenderRange() {
-    const {x, y, width, height} = this.engine.camera.worldBounds();
-    const {cellWidth, cellHeight} = this;
+    const {
+      x, y, width, height,
+    } = this.engine.camera.worldBounds();
+    const { cellWidth, cellHeight } = this;
 
     return {
       startCell: this.cellAtXY(x - cellWidth, y - cellHeight),
       endCell: this.cellAtXY(x + width + cellWidth, y + height + cellHeight),
-    }
+    };
   }
 
   cellAt(col, row) {

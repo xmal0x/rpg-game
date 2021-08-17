@@ -19,8 +19,8 @@ class ClientCell extends PositionedObject {
         col: cfg.cellCol,
         row: cfg.cellRow,
         objectClasses: {
-          player: ClientPlayer
-        }
+          player: ClientPlayer,
+        },
       },
       cfg,
     );
@@ -32,13 +32,13 @@ class ClientCell extends PositionedObject {
     this.objects = cellCfg.map((layer, layerId) => layer.map((objCfg) => {
       let ObjectClass;
 
-      if(objCfg.class) {
-        ObjectClass = objectClasses[objCfg.class]
+      if (objCfg.class) {
+        ObjectClass = objectClasses[objCfg.class];
       } else {
         ObjectClass = ClientGameObject;
       }
 
-      return new ObjectClass({ cell: this, objCfg, layerId })
+      return new ObjectClass({ cell: this, objCfg, layerId });
     }));
   }
 
@@ -52,10 +52,11 @@ class ClientCell extends PositionedObject {
 
   addGameObject(objToAdd) {
     const { objects } = this;
+    /*eslint-disable */
     if (objToAdd.layerId === undefined) {
-      objToAdd.layerId = objects.length; // eslint-disable-line no-use-before-define
+      objToAdd.layerId = objects.length;
     }
-
+    /* eslint-enable */
     if (!objects[objToAdd.layerId]) {
       objects[objToAdd.layerId] = [];
     }
