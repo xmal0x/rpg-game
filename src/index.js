@@ -1,9 +1,78 @@
+import { io } from 'socket.io-client';
 import './index.scss';
 import ClientGame from './client/clientGame';
+import { getTime } from './common/util';
 
 window.addEventListener('load', () => {
-  ClientGame.init({ tagId: 'game' });
+  const socket = io('https://jsprochat.herokuapp.com');
+
+  let userId = '';
+
+  const menu = document.getElementById('menu');
+  const submitBtn = document.getElementById('submitBtn');
+  const input = document.getElementById('name');
+  const form = document.getElementById('nameForm');
+
+  const chatWrap = document.querySelector('.chat-wrap');
+  const chatInput = document.getElementById('input');
+  const chatForm = document.getElementById('form');
+  const chatMessage = document.querySelector('.message');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    menu.parentNode.removeChild(menu);
+
+    chatWrap.style.display = 'block';
+
+    ClientGame.init({ tagId: 'game', playerName: input.value });
+
+    const response = socket.emit('start', input.value);
+    userId = response.id;
+  });
+
+  chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    if (chatInput.value) {
+      console.log(chatInput.value);
+      socket.emit('chat message', chatInput.value);
+      chatInput.value = '';
+    }
+  });
+
+  socket.on('chat connection', (data) => {
+    console.log('#### data: ', data);
+    chatMessage.insertAdjacentHTML(
+      'beforeend',
+      `<p style="color: gray;"><strong>${getTime(data.time)}</strong> - ${data.msg}</p>`,
+    );
+  });
+
+  socket.on('chat disconnect', (data) => {
+    console.log('#### data disconnect: ', data);
+    chatMessage.insertAdjacentHTML(
+      'beforeend',
+      `<p style="color: gray;"><strong>${getTime(data.time)}</strong> - ${data.msg}</p>`,
+    );
+  });
+
+  socket.on('chat online', (data) => {
+    console.log('#### data chat online: ', data);
+    chatMessage.insertAdjacentHTML(
+      'beforeend',
+      `<p style="color: gray;"><strong>${getTime(data.time)}</strong> - ${data.online} user(s) online</p>`,
+    );
+  });
+
+  socket.on('chat message', (data) => {
+    console.log('#### data: ', data);
+    const style = data.id === userId ? `style="color: red;"` : '';
+    chatMessage.insertAdjacentHTML('beforeend', `<p ${style}><strong>${getTime(data.time)}</strong> - ${data.msg}</p>`);
+  });
 });
+// window.addEventListener('load', () => {
+//   ClientGame.init({ tagId: 'game' });
+// });
 
 /*
 import MaleWalk from './assets/Male-3-Walk.png';
