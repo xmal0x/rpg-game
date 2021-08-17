@@ -163,7 +163,7 @@ class ClientEngine {
 
     ctx.fillStyle = options.color;
     ctx.fillText(options.text, barX + barWidth / 2, barY + barHeight - options.verticalPadding, textWidth);
-    /*eslint-enable */
+    /* eslint-enable */
   }
 }
 

@@ -43,11 +43,9 @@ class ClientWorld extends PositionedObject {
       }
     }
   }
-/*eslint-disable */
+  /*eslint-disable */
   render(time) {
-    const {
-      levelCfg, map, worldWidth, worldHeight,
-    } = this;
+    const { levelCfg, map, worldWidth, worldHeight } = this;
 
     for (let layerId = 0; layerId < levelCfg.layers.length; layerId += 1) {
       const layer = levelCfg.layers[layerId];
@@ -59,7 +57,7 @@ class ClientWorld extends PositionedObject {
       }
     }
   }
-  /*eslint-enable */
+  /* eslint-enable */
 
   renderStaticLayer(time, layer, layerId) {
     const { engine } = this;
@@ -81,7 +79,7 @@ class ClientWorld extends PositionedObject {
       engine.switchCanvas('main');
       /*eslint-disable */
       layer.isRendered = true;
-      /*eslint-enable */
+      /* eslint-enable */
     }
 
     engine.renderCanvas(layerName, cameraPos, {
@@ -94,14 +92,14 @@ class ClientWorld extends PositionedObject {
 
   renderDynamicLayer(time, layerId, rangeCells) {
     const { map, worldWidth, worldHeight } = this;
-/*eslint-disable */
+    /*eslint-disable */
     if (!rangeCells) {
       rangeCells = {
         startCell: this.cellAt(0, 0),
         endCell: this.cellAt(worldWidth - 1, worldHeight - 1),
       };
     }
-/*eslint-enable */
+    /* eslint-enable */
     const { startCell, endCell } = rangeCells;
 
     for (let { row } = startCell; row <= endCell.row; row += 1) {
@@ -115,9 +113,9 @@ class ClientWorld extends PositionedObject {
     const {
       width, height, cellWidth, cellHeight,
     } = this;
-/*eslint-disable */
+    /*eslint-disable */
     return this.cellAt((clamp(x, 0, width - 1) / cellWidth) | 0, (clamp(y, 0, height - 1) / cellHeight) | 0);
-    /*eslint-enable */
+    /* eslint-enable */
   }
 
   getRenderRange() {
