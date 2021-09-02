@@ -5,9 +5,9 @@ import { getTime } from './common/util';
 
 window.addEventListener('load', async () => {
   // const socket = io('https://jsprochat.herokuapp.com');
-  const world = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/world').then(res => res.json());
-  const sprites = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/sprites').then(res => res.json());
-  const gameObjects = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/gameObjects').then(res => res.json());
+  const world = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/world').then((res) => res.json());
+  const sprites = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/sprites').then((res) => res.json());
+  const gameObjects = await fetch('https://jsmarathonpro.herokuapp.com/api/v1/gameObjects').then((res) => res.json());
 
   let userId = '';
 
@@ -29,16 +29,16 @@ window.addEventListener('load', async () => {
 
     chatWrap.style.display = 'block';
 
-    ClientGame.init({ 
-      tagId: 'game', 
+    ClientGame.init({
+      tagId: 'game',
       world,
       sprites,
       gameObjects,
       playerName: input.value,
       apiCfg: {
         url: 'https://jsmarathonpro.herokuapp.com/',
-        path: '/game'
-      } 
+        path: '/game',
+      },
     });
 
     // const response = socket.emit('start', input.value);

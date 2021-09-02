@@ -1,9 +1,6 @@
 import ClientEngine from './ClientEngine';
 import ClientWorld from './ClientWorld';
 
-import sprites from '../configs/sprites';
-import levelCfg from '../configs/world.json';
-import gameObjects from '../configs/gameObjects.json';
 import ClientApi from './ClientApi';
 
 class ClientGame {
@@ -15,9 +12,9 @@ class ClientGame {
       players: {},
       api: new ClientApi({
         game: this,
-        ...cfg.apiCfg
+        ...cfg.apiCfg,
       }),
-      spawnPoint: []
+      spawnPoint: [],
     });
 
     this.api.connect();
@@ -43,6 +40,7 @@ class ClientGame {
     this.engine.loadSprites(this.cfg.sprites).then(() => {
       this.map.init();
       this.engine.on('render', (_, time) => {
+        // eslint-disable-next-line
         this.player && this.engine.camera.focusAtGameObject(this.player);
         this.map.render(time);
       });
@@ -54,7 +52,7 @@ class ClientGame {
   }
 
   setPlayers(playersList) {
-    playersList.forEach(player => {
+    playersList.forEach((player) => {
       this.createPlayer(player);
     });
   }
@@ -65,19 +63,24 @@ class ClientGame {
     this.setPlayer(playerObj);
   }
 
-  createPlayer({ id, col, row, layer, skin, name}) {
+  createPlayer({
+    id, col, row, layer, skin, name,
+  }) {
     if (!this.players[id]) {
       const cell = this.map.cellAt(col, row);
-      const playerObj = cell.createGameObject({
-        'class': 'player',
-        type: skin,
-        playerId: id,
-        playerName: name
-      }, layer);
+      const playerObj = cell.createGameObject(
+        {
+          class: 'player',
+          type: skin,
+          playerId: id,
+          playerName: name,
+        },
+        layer,
+      );
 
       cell.addGameObject(playerObj);
 
-      this.players[id] = playerObj; 
+      this.players[id] = playerObj;
     }
 
     return this.players[id];
@@ -130,7 +133,7 @@ class ClientGame {
   }
 
   addSpawnPoint(spawnPoint) {
-    this.spawnPoint.push(spawnPoint)
+    this.spawnPoint.push(spawnPoint);
   }
 
   static init(cfg) {
