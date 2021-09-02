@@ -1,5 +1,6 @@
 import PositionedObject from '../common/PositionedObject';
 import ClientGameObject from './ClientGameObject';
+import ClientPlayer from './ClientPlayer';
 
 class ClientCell extends PositionedObject {
   constructor(cfg) {
@@ -15,15 +16,40 @@ class ClientCell extends PositionedObject {
         y: cellWidth * cfg.cellRow,
         width: cellWidth,
         height: cellHeight,
+        col: cfg.cellCol,
+        row: cfg.cellRow,
+        objectClasses: {
+          player: ClientPlayer,
+        },
       },
       cfg,
     );
     this.initGameObjects();
   }
 
+  createGameObject(objCfg, layerId) {
+    const { objectClasses } = this;
+    let ObjectClass;
+
+    if (objCfg.class) {
+      ObjectClass = objectClasses[objCfg.class];
+    } else {
+      ObjectClass = ClientGameObject;
+    }
+
+    const obj = new ObjectClass({ cell: this, objCfg, layerId });
+
+    if (obj.type === 'spawn') {
+      this.world.game.addSpawnPoint(obj);
+    }
+
+    return obj;
+  }
+
   initGameObjects() {
     const { cellCfg } = this;
-    this.objects = cellCfg.map((layer, layerId) => layer.map((objCfg) => new ClientGameObject({ cell: this, objCfg, layerId })));
+    // eslint-disable-next-line
+    this.objects = cellCfg.map((layer, layerId) => layer.map((objCfg) => this.createGameObject(objCfg, layerId)));
   }
 
   render(time, layerId) {
@@ -36,10 +62,11 @@ class ClientCell extends PositionedObject {
 
   addGameObject(objToAdd) {
     const { objects } = this;
+    /*eslint-disable */
     if (objToAdd.layerId === undefined) {
-      objToAdd.layerId = objects.length; // eslint-disable-line no-use-before-define
+      objToAdd.layerId = objects.length;
     }
-
+    /* eslint-enable */
     if (!objects[objToAdd.layerId]) {
       objects[objToAdd.layerId] = [];
     }
